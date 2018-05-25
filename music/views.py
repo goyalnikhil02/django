@@ -1,12 +1,38 @@
-from django.shortcuts import render, get_object_or_404
-from music.models import Album, Song
+from django.views import generic
+from .models import Album
+from  django.views.generic.edit import  CreateView,UpdateView,DeleteView
+from django.core.urlresolvers import reverse_lazy
 
 
-def index(request):
-    all_albums = Album.objects.all()
-    return render(request, 'music/index.html', {'all_albums': all_albums})
+class IndexView(generic.ListView):
+    template_name = 'music/index.html'
+    context_object_name = "all"
 
 
-def details(request, album_id):
-    album = get_object_or_404(Album, pk=album_id)
-    return render(request, 'music/details.html', {'album': album})
+
+
+    def get_queryset(self):
+        return  Album.objects.all()
+
+
+
+class DetailsView(generic.DetailView):
+    model=Album
+    template_name = 'music/details.html'
+
+
+class AlbumCreate(CreateView):
+    model = Album
+    fields = ['artist','album_title','genre','album_logo']
+
+
+class AlbumUpdate(UpdateView):
+    model = Album
+    fields = ['artist','album_title','genre','album_logo']
+
+
+class Albumdelete(DeleteView):
+    model = Album
+    fields = ['artist','album_title','genre','album_logo']
+
+
